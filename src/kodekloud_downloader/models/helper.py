@@ -33,8 +33,13 @@ def fetch_course_detail(slug: str) -> CourseDetail:
     response.raise_for_status()  # Raise an exception for HTTP errors
     data = response.json()
 
-    return CourseDetail(**data)
+    # Ensure 'includes_section' exists and has 'community_support'
+    if "includes_section" not in data:
+        data["includes_section"] = {}
+    if "community_support" not in data["includes_section"]:
+        data["includes_section"]["community_support"] = False  # Default value
 
+    return CourseDetail(**data)
 
 # Example usage
 if __name__ == "__main__":
